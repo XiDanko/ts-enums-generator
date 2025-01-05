@@ -14,7 +14,7 @@ class TsEnumsGeneratorServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->publishes([__DIR__ . '/../config/config.php' => config_path('ts-enums-generator.php')]);
+        $this->publishes([__DIR__ . '/../config/config.php' => config_path('ts-enums-generator.php')], 'ts-enums-generator-config');
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Generate::class,
