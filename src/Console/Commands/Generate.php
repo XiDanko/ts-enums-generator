@@ -2,6 +2,7 @@
 
 namespace XiDanko\TsEnumsGenerator\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -31,7 +32,7 @@ class Generate extends Command
             $this->info('Generating typescript enums...');
             $this->generate();
             $this->info('Typescript enums generated successfully.');
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->error($exception->getMessage());
         }
     }
@@ -46,9 +47,11 @@ class Generate extends Command
     {
         $phpEnumFiles = File::allFiles($this->sourceDir);
         foreach ($phpEnumFiles as $phpEnumFile) {
-            $tsEnumFilePath = $this->getTsEnumFilePathFrom($phpEnumFile);
-            $tsEnumFileContent = $this->generateTsEnumContentFrom($phpEnumFile);
-            $this->createTsEnumFile($tsEnumFilePath, $tsEnumFileContent);
+            try {
+                $tsEnumFilePath = $this->getTsEnumFilePathFrom($phpEnumFile);
+                $tsEnumFileContent = $this->generateTsEnumContentFrom($phpEnumFile);
+                $this->createTsEnumFile($tsEnumFilePath, $tsEnumFileContent);
+            } catch (Exception $exception) {}
         }
     }
 
